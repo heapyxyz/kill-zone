@@ -26,8 +26,6 @@ public Plugin myinfo =
 
 public void OnPluginStart()
 {
-    RegAdminCmd("sm_zone", Command_Menu, ADMIN_FLAG);
-    RegAdminCmd("sm_zones", Command_Menu, ADMIN_FLAG);
     RegAdminCmd("sm_killzone", Command_Menu, ADMIN_FLAG);
     RegAdminCmd("sm_killzones", Command_Menu, ADMIN_FLAG);
     RegAdminCmd("sm_killzone_edit", Command_Edit, ADMIN_FLAG);
