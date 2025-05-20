@@ -4,6 +4,7 @@
 #include <sourcemod>
 #include <sdktools_functions>
 #include <mapzonelib>
+#include <smlib>
 
 // You can change it to whatever Admin flag you want
 #define ADMIN_FLAG ADMFLAG_CONVARS
@@ -29,6 +30,7 @@ public void OnPluginStart()
     RegAdminCmd("sm_killzone", Command_Menu, ADMIN_FLAG);
     RegAdminCmd("sm_killzones", Command_Menu, ADMIN_FLAG);
     RegAdminCmd("sm_killzone_edit", Command_Edit, ADMIN_FLAG);
+    RegAdminCmd("sm_killzones_edit", Command_Edit, ADMIN_FLAG);
 
     g_hCVEnabled = CreateConVar("sm_killzone_enabled", "1", "Enable Kill Zone?", _, true, 0.0, true, 1.0);
     g_hCVDebug = CreateConVar("sm_killzone_debug", "0", "Show debug messages?", _, true, 0.0, true, 1.0);
@@ -54,8 +56,34 @@ public Action Command_Menu(int client, int args)
     if (g_hCVDebug.BoolValue)
         PrintToServer("[Kill Zone] %N ran: sm_killzone", client);
 
+    if (args >= 2)
+    {
+        char arg[64];
+        GetCmdArg(1, arg, sizeof(arg));
+
+        char argToLower[64];
+        String_ToLower(arg, argToLower, sizeof(argToLower));
+
+        if (StrEqual(argToLower, "edit"))
+        {
+            char zoneName[MAX_ZONE_NAME];
+            GetCmdArg(2, zoneName, sizeof(zoneName));
+
+            if (g_hCVDebug.BoolValue)
+                PrintToServer("[Kill Zone] %N ran: sm_killzone_edit \"%s\"", client, zoneName);
+
+            if (!MapZone_ZoneExists("killzone", zoneName))
+            {
+                PrintToChat(client, "[Kill Zone] Zone with provided name doesn't exist!");
+                return Plugin_Handled;
+            }
+
+            MapZone_ShowZoneEditMenu(client, "killzone", zoneName);
+            return Plugin_Handled;
+        }
+    }
+
     MapZone_ShowMenu(client, "killzone");
- 
     return Plugin_Handled;
 }
 
@@ -74,7 +102,6 @@ public Action Command_Edit(int client, int args)
     }
 
     MapZone_ShowZoneEditMenu(client, "killzone", zoneName);
- 
     return Plugin_Handled;
 }
 
