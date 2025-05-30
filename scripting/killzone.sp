@@ -28,9 +28,7 @@ public Plugin myinfo =
 public void OnPluginStart()
 {
     RegAdminCmd("sm_killzone", Command_Menu, ADMIN_FLAG);
-    RegAdminCmd("sm_killzones", Command_Menu, ADMIN_FLAG);
     RegAdminCmd("sm_killzone_edit", Command_Edit, ADMIN_FLAG);
-    RegAdminCmd("sm_killzones_edit", Command_Edit, ADMIN_FLAG);
 
     g_hCVEnabled = CreateConVar("sm_killzone_enabled", "1", "Enable Kill Zone?", _, true, 0.0, true, 1.0);
     g_hCVDebug = CreateConVar("sm_killzone_debug", "0", "Show debug messages?", _, true, 0.0, true, 1.0);
