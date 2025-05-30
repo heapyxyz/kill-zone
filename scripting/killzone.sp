@@ -27,23 +27,23 @@ public Plugin myinfo =
 
 public void OnPluginStart()
 {
-    RegAdminCmd("sm_killzone", Command_Menu, ADMIN_FLAG);
-    RegAdminCmd("sm_killzone_edit", Command_Edit, ADMIN_FLAG);
+    RegAdminCmd("sm_kill_zone", Command_Menu, ADMIN_FLAG);
+    RegAdminCmd("sm_kill_zone_edit", Command_Edit, ADMIN_FLAG);
 
-    g_hCVEnabled = CreateConVar("sm_killzone_enabled", "1", "Enable Kill Zone?", _, true, 0.0, true, 1.0);
-    g_hCVDebug = CreateConVar("sm_killzone_debug", "0", "Show debug messages?", _, true, 0.0, true, 1.0);
-    AutoExecConfig(true, "killzone");
+    g_hCVEnabled = CreateConVar("sm_kill_zone_enabled", "1", "Enable Kill Zone?", _, true, 0.0, true, 1.0);
+    g_hCVDebug = CreateConVar("sm_kill_zone_debug", "0", "Show debug messages?", _, true, 0.0, true, 1.0);
+    AutoExecConfig(true, "kill_zone");
 
     PrintToServer("[Kill Zone] Hello, World!");
 }
 
 public void OnAllPluginsLoaded()
 {
-    MapZone_RegisterZoneGroup("killzone");
-    MapZone_SetZoneDefaultColor("killzone", ZONE_COLOR);
+    MapZone_RegisterZoneGroup("kill_zone");
+    MapZone_SetZoneDefaultColor("kill_zone", ZONE_COLOR);
 
     if (g_hCVDebug.BoolValue)
-        PrintToServer("[Kill Zone] Registered zone group \"killzone\".");
+        PrintToServer("[Kill Zone] Registered zone group \"kill_zone\".");
 }
 
 //////////////
@@ -51,9 +51,6 @@ public void OnAllPluginsLoaded()
 //////////////
 public Action Command_Menu(int client, int args)
 {
-    if (g_hCVDebug.BoolValue)
-        PrintToServer("[Kill Zone] %N ran: sm_killzone", client);
-
     if (args >= 2)
     {
         char arg[64];
@@ -68,20 +65,23 @@ public Action Command_Menu(int client, int args)
             GetCmdArg(2, zoneName, sizeof(zoneName));
 
             if (g_hCVDebug.BoolValue)
-                PrintToServer("[Kill Zone] %N ran: sm_killzone_edit \"%s\"", client, zoneName);
+                PrintToServer("[Kill Zone] %N ran: sm_kill_zone_edit \"%s\"", client, zoneName);
 
-            if (!MapZone_ZoneExists("killzone", zoneName))
+            if (!MapZone_ZoneExists("kill_zone", zoneName))
             {
                 PrintToChat(client, "[Kill Zone] Zone with provided name doesn't exist!");
                 return Plugin_Handled;
             }
 
-            MapZone_ShowZoneEditMenu(client, "killzone", zoneName);
+            MapZone_ShowZoneEditMenu(client, "kill_zone", zoneName);
             return Plugin_Handled;
         }
     }
 
-    MapZone_ShowMenu(client, "killzone");
+    if (g_hCVDebug.BoolValue)
+        PrintToServer("[Kill Zone] %N ran: sm_kill_zone", client);
+
+    MapZone_ShowMenu(client, "kill_zone");
     return Plugin_Handled;
 }
 
@@ -91,15 +91,15 @@ public Action Command_Edit(int client, int args)
     GetCmdArg(1, zoneName, sizeof(zoneName));
 
     if (g_hCVDebug.BoolValue)
-        PrintToServer("[Kill Zone] %N ran: sm_killzone_edit \"%s\"", client, zoneName);
+        PrintToServer("[Kill Zone] %N ran: sm_kill_zone_edit \"%s\"", client, zoneName);
 
-    if (!MapZone_ZoneExists("killzone", zoneName))
+    if (!MapZone_ZoneExists("kill_zone", zoneName))
     {
         PrintToChat(client, "[Kill Zone] Zone with provided name doesn't exist!");
         return Plugin_Handled;
     }
 
-    MapZone_ShowZoneEditMenu(client, "killzone", zoneName);
+    MapZone_ShowZoneEditMenu(client, "kill_zone", zoneName);
     return Plugin_Handled;
 }
 
@@ -113,7 +113,7 @@ public void MapZone_OnZonesLoaded()
 
 public void MapZone_OnClientEnterZone(int client, const char[] groupName, const char[] zoneName)
 {
-    if (!StrEqual(groupName, "killzone"))
+    if (!StrEqual(groupName, "kill_zone"))
         return;
 
     if (g_hCVDebug.BoolValue)
@@ -125,7 +125,7 @@ public void MapZone_OnClientEnterZone(int client, const char[] groupName, const 
 
 public void MapZone_OnClientLeaveZone(int client, const char[] groupName, const char[] zoneName)
 {
-    if (!StrEqual(groupName, "killzone"))
+    if (!StrEqual(groupName, "kill_zone"))
         return;
 
     if (g_hCVDebug.BoolValue)
@@ -134,7 +134,7 @@ public void MapZone_OnClientLeaveZone(int client, const char[] groupName, const 
 
 public void MapZone_OnZoneCreated(const char[] groupName, const char[] zoneName, MapZoneType zoneType, int client)
 {
-    if (!StrEqual(groupName, "killzone"))
+    if (!StrEqual(groupName, "kill_zone"))
         return;
 
     if (g_hCVDebug.BoolValue)
@@ -145,7 +145,7 @@ public void MapZone_OnZoneCreated(const char[] groupName, const char[] zoneName,
 
 public void MapZone_OnZoneRemoved(const char[] groupName, const char[] zoneName, MapZoneType zoneType, int client)
 {
-    if (!StrEqual(groupName, "killzone"))
+    if (!StrEqual(groupName, "kill_zone"))
         return;
 
     if (g_hCVDebug.BoolValue)
@@ -154,7 +154,7 @@ public void MapZone_OnZoneRemoved(const char[] groupName, const char[] zoneName,
 
 public void MapZone_OnZoneAddedToCluster(const char[] groupName, const char[] zoneName, const char[] clusterName, int client)
 {
-    if (!StrEqual(groupName, "killzone"))
+    if (!StrEqual(groupName, "kill_zone"))
         return;
 
     if (g_hCVDebug.BoolValue)
@@ -163,7 +163,7 @@ public void MapZone_OnZoneAddedToCluster(const char[] groupName, const char[] zo
 
 public void MapZone_OnZoneRemovedFromCluster(const char[] groupName, const char[] zoneName, const char[] clusterName, int client)
 {
-    if (!StrEqual(groupName, "killzone"))
+    if (!StrEqual(groupName, "kill_zone"))
         return;
 
     if (g_hCVDebug.BoolValue)
@@ -172,7 +172,7 @@ public void MapZone_OnZoneRemovedFromCluster(const char[] groupName, const char[
 
 public void MapZone_OnClientTeleportedToZone(int client, const char[] groupName, const char[] zoneName)
 {
-    if (!StrEqual(groupName, "killzone"))
+    if (!StrEqual(groupName, "kill_zone"))
         return;
 
     if (g_hCVDebug.BoolValue)
